@@ -2170,7 +2170,7 @@ version() {
 }
 
 int
-main(int argc, char **argv)
+iodine_main(int argc, char **argv)
 {
 	extern char *__progname;
 	in_addr_t listen_ip;

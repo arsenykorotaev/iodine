@@ -108,7 +108,7 @@ version() {
 }
 
 int
-main(int argc, char **argv)
+iodine_main(int argc, char **argv)
 {
 	char *nameserv_addr;
 	char *topdomain;
