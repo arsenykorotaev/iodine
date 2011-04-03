@@ -2237,7 +2237,7 @@ iodine_main(int argc, char **argv)
 #endif
 
 	memset(password, 0, sizeof(password));
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	fw_query_init();
 	
 	while ((choice = getopt(argc, argv, "vcsfhDu:t:d:m:l:p:n:b:P:z:F:")) != -1) {
