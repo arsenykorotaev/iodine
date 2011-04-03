@@ -64,26 +64,24 @@ WORD req_version = MAKEWORD(2, 2);
 WSADATA wsa_data;
 #endif
 
-#define PASSWORD_ENV_VAR "IODINED_PASS"
-
 static int running = 1;
-static char *topdomain;
-static char password[33];
-static struct encoder *b32;
-static struct encoder *b64;
-static struct encoder *b64u;
-static struct encoder *b128;
-static int created_users;
+char *topdomain;
+char password[33];
+struct encoder *b32;
+struct encoder *b64;
+struct encoder *b64u;
+struct encoder *b128;
+int created_users;
 
-static int check_ip;
-static int my_mtu;
-static in_addr_t my_ip;
-static int netmask;
+int check_ip;
+int my_mtu;
+in_addr_t my_ip;
+int netmask;
 
-static in_addr_t ns_ip;
+in_addr_t ns_ip;
 
-static int bind_port;
-static int debug;
+int bind_port;
+int debug;
 
 #if !defined(BSD) && !defined(__GLIBC__)
 static char *__progname;
@@ -93,7 +91,7 @@ static int read_dns(int, int, struct query *);
 static void write_dns(int, struct query *, char *, int, char);
 static void handle_full_packet(int, int, int);
 
-static void
+void
 sigint(int sig) 
 {
 	running = 0;
@@ -1635,7 +1633,7 @@ tunnel_dns(int tun_fd, int dns_fd, int bind_fd)
 	return 0;
 }
 
-static int
+int
 tunnel(int tun_fd, int dns_fd, int bind_fd)
 {
 	struct timeval tv;
@@ -2115,7 +2113,7 @@ write_dns(int fd, struct query *q, char *data, int datalen, char downenc)
 	sendto(fd, buf, len, 0, (struct sockaddr*)&q->from, q->fromlen);
 }
 
-static void
+void
 usage() {
 	extern char *__progname;
 
@@ -2127,7 +2125,7 @@ usage() {
 	exit(2);
 }
 
-static void
+void
 help() {
 	extern char *__progname;
 
@@ -2162,7 +2160,7 @@ help() {
 	exit(0);
 }
 
-static void
+void
 version() {
 	fprintf(stderr, "iodine IP over DNS tunneling server\n");
 	fprintf(stderr, "version: 0.6.0-rc1 from 2010-02-13\n");
@@ -2211,7 +2209,7 @@ iodine_main(int argc, char **argv)
 	mtu = 1130;	/* Very many relays give fragsize 1150 or slightly
 			   higher for NULL; tun/zlib adds ~17 bytes. */
 	listen_ip = INADDR_ANY;
-	port = 53;
+	port = DNS_PORT;
 	ns_ip = INADDR_ANY;
 	check_ip = 1;
 	skipipconfig = 0;
@@ -2375,7 +2373,7 @@ iodine_main(int argc, char **argv)
 			topdomain, bind_port);
 	}
 	
-	if (port != 53) {
+	if (port != DNS_PORT) {
 		fprintf(stderr, "ALERT! Other dns servers expect you to run on port 53.\n");
 		fprintf(stderr, "You must manually forward port 53 to port %d for things to work.\n", port);
 	}
