@@ -31,7 +31,8 @@
 #define RAW_HDR_GET_USR(x) ((x)[RAW_HDR_CMD] & RAW_HDR_USR_MASK)
 extern const unsigned char raw_header[RAW_HDR_LEN];
 
-#define PASSWORD_ENV_VAR "IODINED_PASS"
+#define SERVER_PASSWORD_ENV_VAR "IODINED_PASS"
+#define CLIENT_PASSWORD_ENV_VAR "IODINE_PASS"
 
 #ifdef WINDOWS32
 #include "windows.h"

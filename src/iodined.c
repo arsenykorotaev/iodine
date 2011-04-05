@@ -2399,8 +2399,8 @@ iodine_main(int argc, char **argv)
 	}
 	
 	if (strlen(password) == 0) {
-		if (NULL != getenv(PASSWORD_ENV_VAR))
-			snprintf(password, sizeof(password), "%s", getenv(PASSWORD_ENV_VAR));
+		if (NULL != getenv(SERVER_PASSWORD_ENV_VAR))
+			snprintf(password, sizeof(password), "%s", getenv(SERVER_PASSWORD_ENV_VAR));
 		else
 			read_password(password, sizeof(password));
 	}

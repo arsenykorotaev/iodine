@@ -17,6 +17,14 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 
+extern enum connection conn;
+extern unsigned short do_qtype;
+extern int selecttimeout;		/* RFC says timeout minimum 5sec */
+extern int running;
+extern char downenc;
+extern int lazymode;
+extern const char *password;
+
 void client_init();
 void client_stop();
 
@@ -32,6 +40,20 @@ void set_downenc(char *encoding);
 void client_set_selecttimeout(int select_timeout);
 void client_set_lazymode(int lazy_mode);
 void client_set_hostname_maxlen(int i);
+int handshake_version(int dns_fd, int *seed);
+int handshake_login(int dns_fd, int seed);
+int handshake_raw_udp(int dns_fd, int seed);
+int handshake_qtype_autodetect(int dns_fd);
+int handshake_edns0_check(int dns_fd);
+int handshake_upenc_autodetect(int dns_fd);
+void handshake_switch_codec(int dns_fd, int bits);
+char handshake_downenc_autodetect(int dns_fd);
+void handshake_switch_downenc(int dns_fd);
+void handshake_try_lazy(int dns_fd);
+int handshake_autoprobe_fragsize(int dns_fd);
+void handshake_set_fragsize(int dns_fd, int fragsize);
+int handshake_waitdns(int dns_fd, char *buf, int buflen, char c1, char c2, int timeout);
+void send_login(int fd, char *login, int len);
 
 int client_handshake(int dns_fd, int raw_mode, int autodetect_frag_size, int fragsize);
 int client_tunnel(int tun_fd, int dns_fd);

@@ -55,8 +55,8 @@
 
 static void handshake_lazyoff(int dns_fd);
 
-static int running;
-static const char *password;
+int running;
+const char *password;
 
 static struct sockaddr_in nameserv;
 static struct sockaddr_in raw_serv;
@@ -91,16 +91,16 @@ static struct encoder *b128;
 static struct encoder *dataenc;
   
 /* The encoder to use for downstream data */
-static char downenc = ' ';
+char downenc = ' ';
  
 /* set query type to send */
-static unsigned short do_qtype = T_UNSET;
+unsigned short do_qtype = T_UNSET;
 
 /* My connection mode */
-static enum connection conn;
+enum connection conn;
 
-static int selecttimeout;		/* RFC says timeout minimum 5sec */
-static int lazymode;
+int selecttimeout;		/* RFC says timeout minimum 5sec */
+int lazymode;
 static long send_ping_soon;
 static time_t lastdownstreamtime;
 static long send_query_sendcnt = -1;
@@ -694,7 +694,7 @@ read_dns_withq(int dns_fd, int tun_fd, char *buf, int buflen, struct query *q)
 	}
 }
 
-static int
+int
 handshake_waitdns(int dns_fd, char *buf, int buflen, char c1, char c2, int timeout)
 /* Wait for DNS reply fitting to our latest query and returns it.
    Returns length of reply = #bytes used in buf.
@@ -1221,7 +1221,7 @@ client_tunnel(int tun_fd, int dns_fd)
 	return rv;
 }
 
-static void
+void
 send_login(int fd, char *login, int len)
 {
 	char data[19];
@@ -1413,7 +1413,7 @@ send_lazy_switch(int fd, int userid)
 	send_query(fd, buf);
 }
 
-static int
+int
 handshake_version(int dns_fd, int *seed)
 {
 	char hex[] = "0123456789abcdef";
@@ -1462,7 +1462,7 @@ handshake_version(int dns_fd, int *seed)
 	return 1;
 }
 
-static int
+int
 handshake_login(int dns_fd, int seed)
 {
 	char in[4096];
@@ -1512,7 +1512,7 @@ handshake_login(int dns_fd, int seed)
 	return 1;
 }
 
-static int
+int
 handshake_raw_udp(int dns_fd, int seed)
 {
 	struct timeval tv;
@@ -1680,7 +1680,7 @@ handshake_upenctest(int dns_fd, char *s)
 	return 0;
 }
 
-static int
+int
 handshake_upenc_autodetect(int dns_fd)
 /* Returns:
    0: keep Base32
@@ -1819,7 +1819,7 @@ handshake_downenctest(int dns_fd, char trycodec)
 	return 0;
 }
 
-static char
+char
 handshake_downenc_autodetect(int dns_fd)
 /* Returns codec char (or ' ' if no advanced codec works) */
 {
@@ -1921,7 +1921,7 @@ handshake_qtype_numcvt(int num)
 	return T_UNSET;
 }
 
-static int
+int
 handshake_qtype_autodetect(int dns_fd)
 /* Returns:
    0: okay, do_qtype set
@@ -1993,7 +1993,7 @@ handshake_qtype_autodetect(int dns_fd)
 	return 0;  /* okay */
 }
 
-static int
+int
 handshake_edns0_check(int dns_fd)
 /* Returns:
    0: EDNS0 not supported; or Ctrl-C
@@ -2043,7 +2043,7 @@ handshake_edns0_check(int dns_fd)
 	return 0;
 }
 
-static void
+void
 handshake_switch_codec(int dns_fd, int bits)
 {
 	char in[4096];
@@ -2099,7 +2099,7 @@ codec_revert:
 	fprintf(stderr, "Falling back to upstream codec %s\n", dataenc->name);
 }
 
-static void
+void
 handshake_switch_downenc(int dns_fd)
 {
 	char in[4096];
@@ -2153,7 +2153,7 @@ codec_revert:
 	fprintf(stderr, "Falling back to downstream codec Base32\n");
 }
 
-static void
+void
 handshake_try_lazy(int dns_fd)
 {
 	char in[4096];
@@ -2303,7 +2303,7 @@ fragsize_check(char *in, int read, int proposed_fragsize, int *max_fragsize)
 }
 
 
-static int
+int
 handshake_autoprobe_fragsize(int dns_fd)
 {
 	char in[4096];
@@ -2379,7 +2379,7 @@ handshake_autoprobe_fragsize(int dns_fd)
 	return max_fragsize - 2;
 }
 
-static void
+void
 handshake_set_fragsize(int dns_fd, int fragsize)
 {
 	char in[4096];

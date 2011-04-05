@@ -48,8 +48,6 @@ WSADATA wsa_data;
 static char *__progname;
 #endif
 
-#define PASSWORD_ENV_VAR "IODINE_PASS"
-
 static void
 sighandler(int sig) 
 {
@@ -305,8 +303,8 @@ iodine_main(int argc, char **argv)
 	}
 	
 	if (strlen(password) == 0) {
-		if (NULL != getenv(PASSWORD_ENV_VAR))
-			snprintf(password, sizeof(password), "%s", getenv(PASSWORD_ENV_VAR));
+		if (NULL != getenv(CLIENT_PASSWORD_ENV_VAR))
+			snprintf(password, sizeof(password), "%s", getenv(CLIENT_PASSWORD_ENV_VAR));
 		else
 			read_password(password, sizeof(password));
 	}
