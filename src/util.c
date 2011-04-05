@@ -48,7 +48,7 @@ char *
 get_resolvconf_addr()
 {
 	static char addr[16];
-	char *rv;
+	char *rv = NULL;
 #ifdef WINDOWS32
 	FIXED_INFO  *fixed_info;
 	ULONG       buflen;
@@ -81,6 +81,26 @@ get_resolvconf_addr()
             rv = addr;
             break;
         }
+    }
+    if (!rv) {
+        char buf[80];
+        FILE *fp;
+        
+        rv = NULL;
+        
+        if ((fp = fopen("/var/run/resolv.conf", "r")) == NULL) 
+            err(1, "/etc/resolv.conf");
+        
+        while (feof(fp) == 0) {
+            fgets(buf, sizeof(buf), fp);
+            
+            if (sscanf(buf, "nameserver %15s", addr) == 1) {
+                rv = addr;
+                break;
+            }
+        }
+        
+        fclose(fp);
     }
 #else
 	char buf[80];
